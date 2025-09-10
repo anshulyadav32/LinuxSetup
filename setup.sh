@@ -37,6 +37,7 @@ readonly AVAILABLE_MODULES=(
     "extra"      # Postfix, Dovecot, SpamAssassin, ClamAV
     "mail"       # Alias for extra (Mail server)
     "backup"     # Backup tools and automation
+    "all"        # Install all modules
 )
 
 # ---------- Utility Functions ----------
@@ -1006,6 +1007,115 @@ EOF
     log_info "Manual backup: /usr/local/bin/system-backup"
 }
 
+install_all_modules() {
+    local os_type="$1"
+    local pkg_mgr="$2"
+    
+    log_header "Installing ALL Modules (Complete Server Setup)"
+    log_info "This will install: Database, Webserver, DNS, Firewall, SSL, Mail, and Backup modules"
+    log_warning "This is a comprehensive installation that may take 15-30 minutes"
+    
+    # Confirm installation
+    echo -e "\n${YELLOW}⚠️  WARNING: This will install ALL server modules!${NC}"
+    echo -e "${CYAN}Modules to be installed:${NC}"
+    echo -e "  • Database servers (MySQL, PostgreSQL)"
+    echo -e "  • Web servers (Apache, Nginx, PHP)"
+    echo -e "  • DNS servers (BIND9, dnsmasq)"
+    echo -e "  • Security (UFW, Fail2Ban, iptables)"
+    echo -e "  • SSL certificates (Certbot, OpenSSL)"
+    echo -e "  • Mail server (Postfix, Dovecot, SpamAssassin, ClamAV)"
+    echo -e "  • Backup system (automated backups)"
+    echo
+    echo -e "${WHITE}This will configure a complete production-ready server.${NC}"
+    echo -e "${RED}Continue? [y/N]${NC}: \c"
+    
+    read -r response
+    if [[ ! "$response" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
+        log_info "Installation cancelled by user"
+        exit 0
+    fi
+    
+    log_info "Starting complete server installation..."
+    
+    # Install modules in logical order
+    local modules_order=("firewall" "database" "webserver" "dns" "ssl" "extra" "backup")
+    local total_modules=${#modules_order[@]}
+    local current_module=1
+    
+    for module in "${modules_order[@]}"; do
+        log_header "Installing Module $current_module/$total_modules: $module"
+        
+        case "$module" in
+            "database")
+                install_database_module "$os_type" "$pkg_mgr"
+                ;;
+            "webserver")
+                install_webserver_module "$os_type" "$pkg_mgr"
+                ;;
+            "dns")
+                install_dns_module "$os_type" "$pkg_mgr"
+                ;;
+            "firewall")
+                install_firewall_module "$os_type" "$pkg_mgr"
+                ;;
+            "ssl")
+                install_ssl_module "$os_type" "$pkg_mgr"
+                ;;
+            "extra")
+                install_extra_module "$os_type" "$pkg_mgr"
+                ;;
+            "backup")
+                install_backup_module "$os_type" "$pkg_mgr"
+                ;;
+        esac
+        
+        log_success "Module '$module' completed ($current_module/$total_modules)"
+        ((current_module++))
+    done
+    
+    # Final configuration for integrated setup
+    log_step "9" "10" "Configuring integrated services"
+    
+    # Configure firewall for all services
+    if command -v ufw >/dev/null 2>&1; then
+        ufw allow 25/tcp    # SMTP
+        ufw allow 143/tcp   # IMAP
+        ufw allow 993/tcp   # IMAPS
+        ufw allow 110/tcp   # POP3
+        ufw allow 995/tcp   # POP3S
+        ufw --force reload
+    fi
+    
+    # Configure Apache virtual host with SSL
+    if [[ -d /etc/apache2/sites-available ]]; then
+        cat > /etc/apache2/sites-available/000-default-ssl.conf << 'EOF'
+<IfModule mod_ssl.c>
+    <VirtualHost *:443>
+        DocumentRoot /var/www/html
+        
+        SSLEngine on
+        SSLCertificateFile /etc/ssl/certs/selfsigned.crt
+        SSLCertificateKeyFile /etc/ssl/private/selfsigned.key
+        
+        # Modern SSL configuration
+        SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+        SSLCipherSuite ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384
+        SSLHonorCipherOrder off
+        SSLSessionTickets off
+        
+        Header always set Strict-Transport-Security "max-age=63072000"
+    </VirtualHost>
+</IfModule>
+EOF
+        
+        a2ensite 000-default-ssl
+        systemctl reload apache2
+    fi
+    
+    log_success "Complete server installation finished!"
+    log_info "All modules have been installed and configured"
+}
+
 # ---------- Main Installation Function ----------
 
 install_module() {
@@ -1069,6 +1179,9 @@ install_module() {
             ;;
         "backup")
             install_backup_module "$os_type" "$pkg_mgr"
+            ;;
+        "all")
+            install_all_modules "$os_type" "$pkg_mgr"
             ;;
     esac
     
@@ -1139,6 +1252,28 @@ install_module() {
             log_info "2. Test backup: /usr/local/bin/system-backup"
             log_info "3. Configure remote storage (rclone config)"
             ;;
+        "all")
+            log_info ""
+            log_info "🎉 Complete Server Setup Finished!"
+            log_info ""
+            log_info "Your server now includes:"
+            log_info "✅ Database: MySQL/MariaDB + PostgreSQL"
+            log_info "✅ Webserver: Apache + Nginx + PHP"
+            log_info "✅ DNS: BIND9 + dnsmasq"
+            log_info "✅ Security: UFW + Fail2Ban + iptables"
+            log_info "✅ SSL: Certbot + OpenSSL + self-signed certs"
+            log_info "✅ Mail: Postfix + Dovecot + SpamAssassin + ClamAV"
+            log_info "✅ Backup: Automated backup system"
+            log_info ""
+            log_info "🔧 Next Steps:"
+            log_info "1. Test web server: http://$(curl -s ifconfig.me 2>/dev/null || echo 'your-server-ip')/"
+            log_info "2. Get SSL certificate: certbot --apache -d yourdomain.com"
+            log_info "3. Configure DNS MX record for mail server"
+            log_info "4. Run mysql_secure_installation for database security"
+            log_info "5. Configure backup settings: nano /etc/backup.conf"
+            log_info ""
+            log_warning "Remember to configure your domain DNS records!"
+            ;;
     esac
 }
 
@@ -1161,6 +1296,7 @@ AVAILABLE MODULES:
     mail       - Postfix + Dovecot + SpamAssassin + ClamAV mail server
     extra      - Same as mail (alias for mail server)
     backup     - Automated backup system + cloud integration
+    all        - Install ALL modules (complete server setup)
 
 OPTIONS:
     -h, --help     Show this help message
@@ -1168,6 +1304,7 @@ OPTIONS:
     --dry-run      Show what would be installed (not implemented)
 
 EXAMPLES:
+    sudo ./setup.sh all          # Install ALL modules (complete server)
     sudo ./setup.sh webserver    # Install complete web server stack
     sudo ./setup.sh database     # Install MySQL and PostgreSQL
     sudo ./setup.sh ssl          # Install SSL/TLS certificates system
@@ -1231,6 +1368,12 @@ list_modules() {
     echo -e "             • Cloud backup integration (rclone)"
     echo -e "             • AWS CLI and Google Cloud SDK"
     echo -e "             • Automated scheduling and cleanup"
+    
+    echo -e "${YELLOW}all${NC}        - ${WHITE}Complete server installation${NC}"
+    echo -e "             ${CYAN}• Installs ALL modules above${NC}"
+    echo -e "             ${CYAN}• Production-ready server setup${NC}"
+    echo -e "             ${CYAN}• Integrated configuration${NC}"
+    echo -e "             ${RED}• Warning: Comprehensive installation${NC}"
     echo ""
 }
 

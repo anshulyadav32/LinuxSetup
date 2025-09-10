@@ -28,6 +28,7 @@ declare -A MODULES=(
     ["firewall"]="Security (UFW, Fail2Ban, iptables)"
     ["ssl"]="SSL/TLS certificates (Let's Encrypt, OpenSSL)"
     ["mail"]="Mail server (Postfix, Dovecot, SpamAssassin)"
+    ["all"]="Complete server setup (ALL modules)"
 )
 
 # Function to show usage
