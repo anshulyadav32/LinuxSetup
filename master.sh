@@ -11,9 +11,12 @@ source "$SCRIPT_DIR/lib/colors.sh" 2>/dev/null || echo "Warning: colors.sh not f
 source "$SCRIPT_DIR/lib/logging.sh" 2>/dev/null || echo "Warning: logging.sh not found"
 
 # Initialize logging if available
-if command -v log_info >/dev/null 2>&1; then
+if command -v setup_logging >/dev/null 2>&1; then
     setup_logging "master"
-else
+fi
+
+# Ensure logging functions are available
+if ! command -v log_info >/dev/null 2>&1; then
     # Fallback logging functions
     log_info() { echo -e "\033[32m[INFO]\033[0m $*"; }
     log_warn() { echo -e "\033[33m[WARN]\033[0m $*"; }
@@ -72,11 +75,8 @@ list_modules() {
     log_info "Available modules in LinuxSetup:"
     echo
     for module in "${!MODULES[@]}"; do
-        if [ -f "$SCRIPT_DIR/modules/${module}.sh" ]; then
-            status="✅ Available"
-        else
-            status="❌ Missing"
-        fi
+        # All modules are available through setup.sh
+        status="✅ Available"
         printf "  %-12s - %s [%s]\n" "$module" "${MODULES[$module]}" "$status"
     done
     echo
@@ -192,8 +192,8 @@ install_module() {
         exit 1
     fi
     
-    # Check if module exists
-    if [ ! -f "$SCRIPT_DIR/modules/${module}.sh" ]; then
+    # Check if module exists in our modules list
+    if [ -z "${MODULES[$module]}" ]; then
         log_error "Module '${module}' not found"
         log_info "Available modules:"
         list_modules
