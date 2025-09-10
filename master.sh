@@ -27,7 +27,7 @@ declare -A MODULES=(
     ["dns"]="DNS servers (BIND9, dnsmasq)"
     ["firewall"]="Security (UFW, Fail2Ban, iptables)"
     ["ssl"]="SSL/TLS certificates (Let's Encrypt, OpenSSL)"
-    ["mail"]="Mail server (Postfix, Dovecot, SpamAssassin)"
+    ["extra"]="Mail server (Postfix, Dovecot, SpamAssassin)"
     ["all"]="Complete server setup (ALL modules)"
 )
 

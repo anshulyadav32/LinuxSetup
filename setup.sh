@@ -35,7 +35,6 @@ readonly AVAILABLE_MODULES=(
     "firewall"   # UFW, Fail2Ban, iptables
     "ssl"        # Certbot, OpenSSL, Let's Encrypt
     "extra"      # Postfix, Dovecot, SpamAssassin, ClamAV
-    "mail"       # Alias for extra (Mail server)
     "backup"     # Backup tools and automation
     "all"        # Install all modules
 )
@@ -1174,7 +1173,7 @@ install_module() {
         "ssl")
             install_ssl_module "$os_type" "$pkg_mgr"
             ;;
-        "extra"|"mail")
+        "extra")
             install_extra_module "$os_type" "$pkg_mgr"
             ;;
         "backup")
@@ -1293,8 +1292,7 @@ AVAILABLE MODULES:
     dns        - BIND9 + dnsmasq DNS servers
     firewall   - UFW + Fail2Ban + iptables security
     ssl        - Certbot + OpenSSL + Let's Encrypt integration
-    mail       - Postfix + Dovecot + SpamAssassin + ClamAV mail server
-    extra      - Same as mail (alias for mail server)
+    extra      - Postfix + Dovecot + SpamAssassin + ClamAV mail server
     backup     - Automated backup system + cloud integration
     all        - Install ALL modules (complete server setup)
 

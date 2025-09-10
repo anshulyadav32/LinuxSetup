@@ -47,20 +47,27 @@ A modular collection of shell scripts for automated Linux system setup and confi
    chmod +x modules/*.sh
    ```
 
-3. **Run the main setup:**
+3. **Install everything (complete server):**
    ```bash
-   sudo ./setup.sh
+   sudo ./setup.sh all
    ```
 
-### Modular Setup
+4. **Or install specific modules:**
+   ```bash
+   sudo ./setup.sh webserver    # Web server only
+   sudo ./setup.sh database     # Database only
+   ```
 
-For a more customized installation, use the modular approach:
+### Quick Module Access
+
+Use the master.sh script for easy module management:
 
 ```bash
-sudo ./setup-modular.sh
+./master.sh --module ssl        # Install SSL module
+./master.sh --module extra      # Install mail server
+./master.sh --status            # Show system status
+./master.sh --list              # List available modules
 ```
-
-This allows you to select which components to install and configure.
 
 ### Demo Mode
 
@@ -73,31 +80,63 @@ To see the scripts in action without making system changes:
 
 ## 📋 Available Modules
 
-- **🗄️ Database**: MySQL, PostgreSQL, MongoDB setup and configuration
-- **🌐 DNS**: DNS server configuration and management
-- **🔥 Firewall**: UFW, iptables configuration and security rules
-- **🔒 SSL**: Let's Encrypt, self-signed certificates, SSL configuration
-- **🖥️ Web Server**: Apache, Nginx installation and virtual host setup
+- **🗄️ Database**: MySQL, PostgreSQL setup and configuration
+- **🖥️ Web Server**: Apache, Nginx, PHP installation and configuration
+- **🌐 DNS**: BIND9, dnsmasq DNS server configuration
+- **🔥 Firewall**: UFW, Fail2Ban, iptables security setup
+- **🔒 SSL**: Certbot, OpenSSL, Let's Encrypt integration
+- **📧 Extra**: Mail server (Postfix, Dovecot, SpamAssassin, ClamAV)
+- **💾 Backup**: Automated backup system with cloud integration
+- **� All**: Complete server setup (installs ALL modules)
 
 ## 🔧 Configuration
 
 Each module can be configured independently. Check the individual module files in the `modules/` directory for specific configuration options.
 
-### Environment Variables
-
-You can customize the installation by setting environment variables:
+### Available Commands
 
 ```bash
-export INSTALL_WEBSERVER=true
-export INSTALL_DATABASE=true
-export INSTALL_SSL=false
-./setup-modular.sh
+# Complete server installation
+sudo ./setup.sh all
+
+# Individual modules
+sudo ./setup.sh database
+sudo ./setup.sh webserver
+sudo ./setup.sh dns
+sudo ./setup.sh firewall
+sudo ./setup.sh ssl
+sudo ./setup.sh extra        # Mail server
+sudo ./setup.sh backup
+
+# Quick access with master.sh
+./master.sh --module <module>
+./master.sh --status
+./master.sh --list
+./master.sh --help
+
+# Help and information
+./setup.sh --help
+./setup.sh --list
 ```
 
-## 📚 Documentation
+## � System Monitoring
+
+Monitor your server status with the built-in status command:
+
+```bash
+./master.sh --status
+```
+
+This provides:
+- **Service Status**: Apache, Nginx, MySQL, PostgreSQL, DNS, Mail services
+- **SSL Certificate Info**: Installed certificates and expiration
+- **System Resources**: Disk space, memory usage
+- **Security Status**: Firewall and security service status
+
+## �📚 Documentation
 
 - [Module Documentation](website/docs/)
-- [Configuration Guide](website/docs/)
+- [Configuration Guide](website/docs/)  
 - [Troubleshooting](website/docs/)
 
 ## 🤝 Contributing
