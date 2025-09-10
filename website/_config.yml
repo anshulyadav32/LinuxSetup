@@ -1,0 +1,18 @@
+title: Linux Setup - Modular Server Management System
+description: Enterprise-grade modular server management system with 8 service modules, 12 automation workflows, and professional installation system for Linux server administration
+theme: jekyll-theme-cayman
+show_downloads: true
+google_analytics:
+baseurl: ""
+url: "https://ls.r-u.live"
+domain: ls.r-u.live
+source: website
+github:
+  is_project_page: true
+  repository_url: "https://github.com/anshulyadav32/linux-setup"
+  owner_url: "https://github.com/anshulyadav32"
+  owner_name: "anshulyadav32"
+alternate_url: "https://anshulyadav32.github.io/linux-setup"
+primary_domain: "ls.r-u.live"
+github_pages_domain: "anshulyadav32.github.io/linux-setup"
+enable_domain_switching: true

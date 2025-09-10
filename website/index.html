@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Setup - Complete Server Management System</title>
+    <meta name="description" content="Automate Linux server setup with web hosting, databases, DNS, firewall, SSL, backup, and security tools">
+    
+    <!-- CSS Framework (Tailwind CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        .hero-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .copy-button { 
+            background: #4CAF50; 
+            color: white; 
+            padding: 6px 12px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 12px; 
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .copy-button:hover { 
+            background: #45a049; 
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .copy-button:active {
+            transform: translateY(0);
+        }
+        .copy-button.copied {
+            background: #2196F3;
+            animation: pulse 0.3s ease;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Enhanced code block styling */
+        .code-container {
+            position: relative;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        
+        .code-container code {
+            display: block;
+            padding: 16px;
+            color: #e5e5e5;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .code-header {
+            background: #2d2d2d;
+            padding: 8px 16px;
+            border-bottom: 1px solid #444;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        /* Additional responsive improvements */
+        @media (max-width: 640px) {
+            .hero-gradient h1 { font-size: 2.5rem !important; }
+            .hero-gradient .text-xl { font-size: 1.1rem !important; }
+            .space-x-4 > * + * { margin-left: 0 !important; margin-top: 1rem; }
+            .space-x-4 { flex-direction: column; align-items: center; }
+        }
+        
+        @media (max-width: 768px) {
+            .grid.md\\:grid-cols-2 { grid-template-columns: 1fr !important; }
+            .grid.md\\:grid-cols-3 { grid-template-columns: 1fr !important; }
+            .text-5xl { font-size: 3rem !important; }
+            .px-8 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+            .py-20 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+        }
+        
+        /* Mobile menu animations */
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        #mobile-menu:not(.hidden) {
+            max-height: 500px;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { max-height: 0; opacity: 0; }
+            to { max-height: 500px; opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-600">🚀 Linux Setup</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Home</a>
+                    <a href="#installation" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Installation</a>
+                    <a href="#usage" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Usage</a>
+                    <a href="#components" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Components</a>
+                    <a href="#modules" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Modules</a>
+                    <a href="#core-scripts" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Core Scripts</a>
+                    <a href="#maintenance" class="text-gray-700 hover:text-blue-600 transition-colors font-medium">Maintenance</a>
+                    <a href="https://github.com/anshulyadav32/linux-server" target="_blank" rel="noopener" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">GitHub</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-button" type="button" class="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600 p-2" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <!-- Hamburger icon -->
+                        <svg id="hamburger-icon" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <!-- Close icon -->
+                        <svg id="close-icon" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="lg:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+                <a href="#home" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium transition-colors">Home</a>
+                <a href="#installation" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium transition-colors">Installation</a>
+                <a href="#usage" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium transition-colors">Usage</a>
+                <a href="#components" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium transition-colors">Components</a>
+                <a href="#modules" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium transition-colors">Modules</a>
+                <a href="#core-scripts" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium transition-colors">Core Scripts</a>
+                <a href="#maintenance" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium transition-colors">Maintenance</a>
+                <div class="px-3 py-2">
+                    <a href="https://github.com/anshulyadav32/linux-server" target="_blank" rel="noopener" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium w-full text-center block">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Project Overview -->
+    <section id="home" class="hero-gradient text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-bold mb-6">Complete Server Management System</h1>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">
+                Deploy enterprise-grade infrastructure with SSL certificates, mail servers, databases, 
+                web servers, security systems, and backup solutions. Complete server automation in minutes.
+            </p>
+            <div class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm max-w-2xl mx-auto mb-8">
+                <strong>Tech Stack:</strong> Bash scripting • SSL automation • Mail servers • Multi-database • Web servers • Security hardening • Backup systems
+            </div>
+            <div class="space-x-4">
+                <a href="#installation" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                    Get Started
+                </a>
+                <a href="https://github.com/anshulyadav32/linux-setup" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Page -->
+    <section id="installation" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-12">Installation Methods</h2>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Quick Remote Install -->
+                <div class="bg-green-50 p-8 rounded-xl border border-green-200">
+                    <h3 class="text-2xl font-bold text-green-800 mb-6">⚡ Quick Remote Install</h3>
+                    <p class="text-gray-700 mb-6">One-line installation from live repository:</p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Bash</span>
+                            <button class="copy-button" onclick="copyCodeToClipboard(this, 'curl -sSL https://raw.githubusercontent.com/anshulyadav32/linux-server/main/install.sh | sudo bash')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                        <code>curl -sSL https://raw.githubusercontent.com/anshulyadav32/linux-server/main/install.sh | sudo bash</code>
+                    </div>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <ul class="space-y-1">
+                            <li>✅ Fastest installation method</li>
+                            <li>✅ Always uses latest version</li>
+                            <li>✅ Automatic dependency handling</li>
+                            <li>✅ No local download required</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Local Installation -->
+                <div class="bg-blue-50 p-8 rounded-xl border border-blue-200">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-6">📦 Local Installation</h3>
+                    <p class="text-gray-700 mb-6">Clone and install locally for full control:</p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Bash</span>
+                            <button class="copy-button" onclick="copyCodeToClipboard(this, 'git clone https://github.com/anshulyadav32/linux-server.git\ncd linux-server\nsudo ./install.sh')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                        <code>git clone https://github.com/anshulyadav32/linux-server.git
+cd linux-server
+sudo ./install.sh</code>
+                    </div>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <ul class="space-y-1">
+                            <li>✅ Full control over installation</li>
+                            <li>✅ Installs all 25+ components</li>
+                            <li>✅ Customizable configuration</li>
+                            <li>✅ Production ready</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-gray-100 p-8 rounded-xl">
+                <h3 class="text-xl font-bold mb-4 text-center">🔧 Individual Module Installation</h3>
+                <p class="text-gray-600 mb-6 text-center">To install a specific module, run its install script directly from the <code>modules</code> folder:</p>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-white p-4 rounded-lg relative">
+                        <strong>Webserver:</strong>
+                        <div class="code-container mt-2" style="background: #f8f9fa; border: 1px solid #e9ecef;">
+                            <code style="color: #28a745; padding: 8px; font-size: 13px;">sudo bash modules/webserver/install.sh</code>
+                            <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/webserver/install.sh')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg relative">
+                        <strong>Database:</strong>
+                        <div class="code-container mt-2" style="background: #f8f9fa; border: 1px solid #e9ecef;">
+                            <code style="color: #28a745; padding: 8px; font-size: 13px;">sudo bash modules/database/install.sh</code>
+                            <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/database/install.sh')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg relative">
+                        <strong>DNS:</strong>
+                        <div class="code-container mt-2" style="background: #f8f9fa; border: 1px solid #e9ecef;">
+                            <code style="color: #28a745; padding: 8px; font-size: 13px;">sudo bash modules/dns/install.sh</code>
+                            <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/dns/install.sh')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg relative">
+                        <strong>Firewall:</strong>
+                        <div class="code-container mt-2" style="background: #f8f9fa; border: 1px solid #e9ecef;">
+                            <code style="color: #28a745; padding: 8px; font-size: 13px;">sudo bash modules/firewall/install.sh</code>
+                            <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/firewall/install.sh')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg relative">
+                        <strong>SSL:</strong>
+                        <div class="code-container mt-2" style="background: #f8f9fa; border: 1px solid #e9ecef;">
+                            <code style="color: #28a745; padding: 8px; font-size: 13px;">sudo bash modules/ssl/install.sh</code>
+                            <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/ssl/install.sh')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg relative">
+                        <strong>Backup:</strong>
+                        <div class="code-container mt-2" style="background: #f8f9fa; border: 1px solid #e9ecef;">
+                            <code style="color: #28a745; padding: 8px; font-size: 13px;">sudo bash modules/backup/install.sh</code>
+                            <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/backup/install.sh')">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Management Scripts -->
+    <section id="core-scripts" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-12">🛠️ Core Management Scripts</h2>
+            <p class="text-xl text-gray-600 text-center mb-12">Essential tools for system monitoring and maintenance</p>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- S3.sh Script -->
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-xl shadow-lg border border-blue-100">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-blue-600 text-white p-3 rounded-lg mr-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,14H13V16H11V14M11,8H13V12H11V8Z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">s3.sh</h3>
+                            <p class="text-blue-600 font-medium">System Comprehensive Check</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-6 leading-relaxed">
+                        Advanced health monitoring script that performs comprehensive system analysis, 
+                        service validation, and generates detailed reports with intelligent recommendations.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-lg border border-blue-200">
+                            <h4 class="font-semibold text-gray-800 mb-2">📋 Key Features</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>✅ Multi-level health monitoring (System, Services, Security)</li>
+                                <li>✅ Intelligent performance analysis</li>
+                                <li>✅ Automated issue detection and recommendations</li>
+                                <li>✅ Modular component checking</li>
+                                <li>✅ Detailed reporting with export options</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-blue-200">
+                            <h4 class="font-semibold text-gray-800 mb-3">💻 Usage Examples</h4>
+                            <div class="space-y-3">
+                                <div class="code-container" style="background: #f8f9fa; border: 1px solid #e9ecef; position: relative;">
+                                    <code style="color: #28a745; padding: 8px; font-size: 13px; display: block;">sudo ./s3.sh</code>
+                                    <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo ./s3.sh')">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500">Standard comprehensive health check</p>
+                                
+                                <div class="code-container" style="background: #f8f9fa; border: 1px solid #e9ecef; position: relative;">
+                                    <code style="color: #28a745; padding: 8px; font-size: 13px; display: block;">sudo ./s3.sh --verbose --export</code>
+                                    <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo ./s3.sh --verbose --export')">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500">Detailed check with report generation</p>
+                                
+                                <div class="code-container" style="background: #f8f9fa; border: 1px solid #e9ecef; position: relative;">
+                                    <code style="color: #28a745; padding: 8px; font-size: 13px; display: block;">sudo ./s3.sh webserver database ssl</code>
+                                    <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo ./s3.sh webserver database ssl')">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500">Check specific modules only</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update-server.sh Script -->
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-xl shadow-lg border border-green-100">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-green-600 text-white p-3 rounded-lg mr-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">update-server.sh</h3>
+                            <p class="text-green-600 font-medium">Intelligent Update Management</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-6 leading-relaxed">
+                        Smart update orchestration system that safely manages system updates, 
+                        component upgrades, and configuration synchronization with rollback capabilities.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-lg border border-green-200">
+                            <h4 class="font-semibold text-gray-800 mb-2">🚀 Key Features</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>✅ Safe, staged update process with validation</li>
+                                <li>✅ Automatic backup creation before updates</li>
+                                <li>✅ Component-specific update strategies</li>
+                                <li>✅ Rollback capabilities for failed updates</li>
+                                <li>✅ Update scheduling and maintenance windows</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-green-200">
+                            <h4 class="font-semibold text-gray-800 mb-3">⚡ Usage Examples</h4>
+                            <div class="space-y-3">
+                                <div class="code-container" style="background: #f8f9fa; border: 1px solid #e9ecef; position: relative;">
+                                    <code style="color: #28a745; padding: 8px; font-size: 13px; display: block;">sudo ./update-server.sh</code>
+                                    <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo ./update-server.sh')">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500">Full system update with safety checks</p>
+                                
+                                <div class="code-container" style="background: #f8f9fa; border: 1px solid #e9ecef; position: relative;">
+                                    <code style="color: #28a745; padding: 8px; font-size: 13px; display: block;">sudo ./update-server.sh --check</code>
+                                    <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo ./update-server.sh --check')">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-500">Check for available updates</p>
+                                
+                                <div class="code-container" style="background: #f8f9fa; border: 1px solid #e9ecef; position: relative;">
+                                    <code style="color: #28a745; padding: 8px; font-size: 13px; display: block;">sudo ./update-server.sh --module webserver</code>
+                                    <button class="copy-button" style="position: absolute; top: 8px; right: 8px; font-size: 10px; padding: 4px 8px;" onclick="copyCodeToClipboard(this, 'sudo ./update-server.sh --module webserver')">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-gray-5000">Update specific component</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-gradient-to-r from-blue-50 to-green-50 p-8 rounded-xl border border-gray-200">
+                <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">🔄 Workflow Integration</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="bg-blue-600 text-white p-3 rounded-full w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                            <span class="font-bold">1</span>
+                        </div>
+                        <h4 class="font-semibold mb-2">Health Check</h4>
+                        <p class="text-sm text-gray-600">Run s3.sh to assess system status</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-green-600 text-white p-3 rounded-full w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                            <span class="font-bold">2</span>
+                        </div>
+                        <h4 class="font-semibold mb-2">Update & Maintain</h4>
+                        <p class="text-sm text-gray-600">Use update-server.sh for safe updates</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-purple-600 text-white p-3 rounded-full w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                            <span class="font-bold">3</span>
+                        </div>
+                        <h4 class="font-semibold mb-2">Verify & Monitor</h4>
+                        <p class="text-sm text-gray-600">Continuous monitoring with automated reports</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Methods -->
+    <section id="usage" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-12">Usage Methods</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">📦 Installation Method</h3>
+                    <p class="text-gray-600 mb-4">Complete server setup with automated installation and configuration.</p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Installation Commands</span>
+                            <button class="copy-button" onclick="copyCodeToClipboard(this, '# Complete installation\nsudo ./install.sh\n\n# Run system health check\nsudo ./s3.sh\n\n# Update server components\nsudo ./update-server.sh')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                        <code># Complete installation
+sudo ./install.sh
+
+# Run system health check
+sudo ./s3.sh
+
+# Update server components
+sudo ./update-server.sh</code>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">⚡ Health Monitoring</h3>
+                    <p class="text-gray-600 mb-4">Advanced system monitoring and maintenance commands.</p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span>Monitoring Commands</span>
+                            <button class="copy-button" onclick="copyCodeToClipboard(this, '# Comprehensive health check\nsudo ./s3.sh --verbose\n\n# Quick system overview\nsudo ./s3.sh --fast --summary\n\n# Check specific modules\nsudo ./s3.sh database webserver ssl')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                        <code># Comprehensive health check
+sudo ./s3.sh --verbose
+
+# Quick system overview
+sudo ./s3.sh --fast --summary
+
+# Check specific modules
+sudo ./s3.sh database webserver ssl
+# Quick module access<br>
+./master.sh --module ssl<br>
+./master.sh --module mail<br>
+./master.sh --status</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Components Page -->
+    <section id="components" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-12">Server Components</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- SSL Module -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border card-hover">
+                    <div class="text-3xl mb-4">🔐</div>
+                    <h3 class="text-xl font-bold mb-3">SSL Certificates</h3>
+                    <p class="text-gray-600 mb-4">Let's Encrypt automation with multi-domain support</p>
+                    <div class="bg-gray-100 p-3 rounded text-sm font-mono">
+                        <code>./modules/ssl/menu.sh</code>
+                    </div>
+                </div>
+
+                <!-- Mail System -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border card-hover">
+                    <div class="text-3xl mb-4">✉️</div>
+                    <h3 class="text-xl font-bold mb-3">Mail System</h3>
+                    <p class="text-gray-600 mb-4">Postfix, Dovecot, Roundcube with DKIM/SPF/DMARC</p>
+                    <div class="bg-gray-100 p-3 rounded text-sm font-mono relative">
+                        <code>sudo bash modules/extra/install.sh</code>
+                        <button class="copy-button" style="position: absolute; top: 4px; right: 4px; font-size: 10px; padding: 2px 6px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/extra/install.sh')">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Database -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border card-hover">
+                    <div class="text-3xl mb-4">🗄️</div>
+                    <h3 class="text-xl font-bold mb-3">Database</h3>
+                    <p class="text-gray-600 mb-4">PostgreSQL, MariaDB, MongoDB with backup automation</p>
+                    <div class="bg-gray-100 p-3 rounded text-sm font-mono relative">
+                        <code>sudo bash modules/database/install.sh</code>
+                        <button class="copy-button" style="position: absolute; top: 4px; right: 4px; font-size: 10px; padding: 2px 6px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/database/install.sh')">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Firewall & Security -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border card-hover">
+                    <div class="text-3xl mb-4">🔒</div>
+                    <h3 class="text-xl font-bold mb-3">Firewall & Security</h3>
+                    <p class="text-gray-600 mb-4">UFW, Fail2Ban, ClamAV with security auditing</p>
+                    <div class="bg-gray-100 p-3 rounded text-sm font-mono relative">
+                        <code>sudo bash modules/firewall/install.sh</code>
+                        <button class="copy-button" style="position: absolute; top: 4px; right: 4px; font-size: 10px; padding: 2px 6px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/firewall/install.sh')">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Backup System -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border card-hover">
+                    <div class="text-3xl mb-4">💾</div>
+                    <h3 class="text-xl font-bold mb-3">Backup System</h3>
+                    <p class="text-gray-600 mb-4">Automated backups with encryption and remote sync</p>
+                    <div class="bg-gray-100 p-3 rounded text-sm font-mono relative">
+                        <code>sudo bash modules/backup/install.sh</code>
+                        <button class="copy-button" style="position: absolute; top: 4px; right: 4px; font-size: 10px; padding: 2px 6px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/backup/install.sh')">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>                <!-- Database -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border card-hover">
+                    <div class="text-3xl mb-4">🗄️</div>
+                    <h3 class="text-xl font-bold mb-3">Database</h3>
+                    <p class="text-gray-600 mb-4">PostgreSQL, MariaDB, MongoDB with backup automation</p>
+                    <div class="bg-gray-100 p-3 rounded text-sm font-mono">
+                        <code>./modules/database/menu.sh</code>
+                    </div>
+                </div>
+
+                <!-- Firewall & Security -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border card-hover">
+                    <div class="text-3xl mb-4">🔒</div>
+                    <h3 class="text-xl font-bold mb-3">Firewall & Security</h3>
+                    <p class="text-gray-600 mb-4">UFW, Fail2Ban, ClamAV with security auditing</p>
+                    <div class="bg-gray-100 p-3 rounded text-sm font-mono">
+                        <code>./modules/firewall/menu.sh</code>
+                    </div>
+                </div>
+
+                <!-- Backup System -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border card-hover">
+                    <div class="text-3xl mb-4">�</div>
+                    <h3 class="text-xl font-bold mb-3">Backup System</h3>
+                    <p class="text-gray-600 mb-4">Automated backups with encryption and remote sync</p>
+                    <div class="bg-gray-100 p-3 rounded text-sm font-mono">
+                        <code>./modules/backup/menu.sh</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Page -->
+    <section id="modules" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-12">Modules Quick Guide</h2>
+            
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-4 text-left font-semibold">Module</th>
+                            <th class="px-6 py-4 text-left font-semibold">Quick Commands</th>
+                            <th class="px-6 py-4 text-left font-semibold">Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 font-semibold">🔐 SSL</td>
+                            <td class="px-6 py-4 font-mono text-sm">./modules/ssl/functions.sh install_certificate domain.com</td>
+                            <td class="px-6 py-4 text-gray-600">Install SSL certificate</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4 font-semibold">✉️ Mail</td>
+                            <td class="px-6 py-4 font-mono text-sm">./modules/mail/functions.sh add_user user@domain.com</td>
+                            <td class="px-6 py-4 text-gray-600">Add email account</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 font-semibold">🗄️ Database</td>
+                            <td class="px-6 py-4 font-mono text-sm">./modules/database/functions.sh install_postgresql</td>
+                            <td class="px-6 py-4 text-gray-600">Install PostgreSQL</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4 font-semibold">🔒 Firewall</td>
+                            <td class="px-6 py-4 font-mono text-sm relative">
+                                sudo bash modules/firewall/install.sh
+                                <button class="copy-button" style="position: absolute; top: 2px; right: 2px; font-size: 8px; padding: 2px 4px;" onclick="copyCodeToClipboard(this, 'sudo bash modules/firewall/install.sh')">
+                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                    </svg>
+                                </button>
+                            </td>
+                            <td class="px-6 py-4 text-gray-600">Configure firewall</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 font-semibold">💾 Backup</td>
+                            <td class="px-6 py-4 font-mono text-sm">./modules/backup/functions.sh create_backup</td>
+                            <td class="px-6 py-4 text-gray-600">Create system backup</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4 font-semibold">🌐 Webserver</td>
+                            <td class="px-6 py-4 font-mono text-sm">./modules/webserver/functions.sh create_virtual_host domain.com</td>
+                            <td class="px-6 py-4 text-gray-600">Create virtual host</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <!-- Maintenance & Update -->
+    <section id="maintenance" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center mb-12">Maintenance & Update</h2>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Update Guide -->
+                <div class="bg-blue-50 p-8 rounded-xl border border-blue-200">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-6">📦 Update System</h3>
+                    <div class="code-container mb-4">
+                        <div class="code-header">
+                            <span>Update Commands</span>
+                            <button class="copy-button" onclick="copyCodeToClipboard(this, '# Update server components\nsudo ./update-server.sh\n\n# Update with backup\nsudo ./update-server.sh --backup\n\n# Preview updates (dry run)\nsudo ./update-server.sh --dry-run')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                        <code># Update server components
+sudo ./update-server.sh
+
+# Update with backup
+sudo ./update-server.sh --backup
+
+# Preview updates (dry run)
+sudo ./update-server.sh --dry-run</code>
+                    </div>
+                </div>
+
+                <!-- Error Handling -->
+                <div class="bg-red-50 p-8 rounded-xl border border-red-200">
+                    <h3 class="text-2xl font-bold text-red-800 mb-6">🔧 Fix Common Issues</h3>
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <strong>Permission Issues:</strong>
+                            <div class="bg-gray-900 text-red-400 p-2 rounded font-mono mt-1 relative">
+                                <code>chmod +x *.sh modules/**/*.sh</code>
+                                <button class="copy-button" style="position: absolute; top: 2px; right: 2px; font-size: 9px; padding: 2px 4px;" onclick="copyCodeToClipboard(this, 'chmod +x *.sh modules/**/*.sh')">
+                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>Service Problems:</strong>
+                            <div class="bg-gray-900 text-red-400 p-2 rounded font-mono mt-1 relative">
+                                <code>sudo systemctl restart apache2</code>
+                                <button class="copy-button" style="position: absolute; top: 2px; right: 2px; font-size: 9px; padding: 2px 4px;" onclick="copyCodeToClipboard(this, 'sudo systemctl restart apache2')">
+                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>SSL Issues:</strong>
+                            <div class="bg-gray-900 text-red-400 p-2 rounded font-mono mt-1 relative">
+                                <code>sudo certbot renew --dry-run</code>
+                                <button class="copy-button" style="position: absolute; top: 2px; right: 2px; font-size: 9px; padding: 2px 4px;" onclick="copyCodeToClipboard(this, 'sudo certbot renew --dry-run')">
+                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Note -->
+            <div class="mt-12 bg-yellow-50 p-8 rounded-xl border border-yellow-200">
+                <h3 class="text-2xl font-bold text-yellow-800 mb-4">🔒 Security Note</h3>
+                <p class="text-gray-700 mb-4">
+                    <strong>Always review scripts before running with elevated privileges.</strong>
+                    You can inspect any script by opening its URL in your browser before execution.
+                </p>
+                <div class="bg-gray-900 text-yellow-400 p-3 rounded font-mono text-sm">
+                    <code>https://github.com/anshulyadav32/linux-setup</code>
+                </div>
+                <p class="text-gray-600 mt-3">All scripts are open source and available for review on our GitHub repository.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">🚀 Linux Setup</h3>
+                    <p class="text-gray-400">Complete server management platform for Linux infrastructure automation.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Links</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="https://github.com/anshulyadav32/linux-setup" class="hover:text-white transition-colors">GitHub Repo</a></li>
+                        <li><a href="https://github.com/anshulyadav32/linux-setup#readme" class="hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="https://github.com/anshulyadav32/linux-setup/issues" class="hover:text-white transition-colors">Issues</a></li>
+                        <li><a href="https://github.com/anshulyadav32/linux-setup/discussions" class="hover:text-white transition-colors">Discussions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Components</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Web Server Management</li>
+                        <li>Database Systems</li>
+                        <li>Mail Server Setup</li>
+                        <li>DNS Management</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Security</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Firewall Configuration</li>
+                        <li>SSL/TLS Automation</li>
+                        <li>Intrusion Prevention</li>
+                        <li>Security Auditing</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Linux Setup. MIT License. Built with ❤️ for the Linux community.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for copy functionality and smooth scrolling -->
+    <script>
+        // Enhanced copy function with visual feedback
+        function copyCodeToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success feedback
+                const originalContent = button.innerHTML;
+                button.classList.add('copied');
+                button.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+                    </svg>
+                    Copied!
+                `;
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.innerHTML = originalContent;
+                }, 2000);
+            }).catch(function(error) {
+                console.error('Failed to copy: ', error);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalContent = button.innerHTML;
+                    button.innerHTML = 'Copied!';
+                    setTimeout(() => {
+                        button.innerHTML = originalContent;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Fallback copy failed: ', err);
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+        
+        // Legacy function for backwards compatibility
+        function copyToClipboard(elementId) {
+            const codeBlocks = {
+                'quick-install': 'curl -sSL https://raw.githubusercontent.com/anshulyadav32/linux-server/main/install.sh | sudo bash',
+                'local-install': 'git clone https://github.com/anshulyadav32/linux-server.git\ncd linux-server\nsudo ./install.sh'
+            };
+            
+            if (codeBlocks[elementId]) {
+                copyCodeToClipboard(event.target, codeBlocks[elementId]);
+            }
+        }
+
+        // Mobile menu toggle functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        mobileMenuButton.addEventListener('click', function() {
+            const isOpen = mobileMenu.classList.contains('hidden');
+            
+            if (isOpen) {
+                // Show mobile menu
+                mobileMenu.classList.remove('hidden');
+                hamburgerIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+                mobileMenuButton.setAttribute('aria-expanded', 'true');
+            } else {
+                // Hide mobile menu
+                mobileMenu.classList.add('hidden');
+                hamburgerIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close mobile menu when clicking on navigation links
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                hamburgerIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = mobileMenuButton.contains(event.target) || mobileMenu.contains(event.target);
+            
+            if (!isClickInsideNav && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                hamburgerIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Add copy functionality to all code blocks
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeBlocks = document.querySelectorAll('pre code');
+            codeBlocks.forEach(block => {
+                if (!block.parentNode.querySelector('.copy-button')) {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.classList.add('copy-button');
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.style.position = 'absolute';
+                    copyBtn.style.right = '10px';
+                    copyBtn.style.top = '10px';
+                    
+                    const pre = block.parentNode;
+                    pre.style.position = 'relative';
+                    pre.appendChild(copyBtn);
+                    
+                    copyBtn.addEventListener('click', function() {
+                        navigator.clipboard.writeText(block.textContent).then(function() {
+                            copyBtn.textContent = 'Copied!';
+                            setTimeout(function() {
+                                copyBtn.textContent = 'Copy';
+                            }, 2000);
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

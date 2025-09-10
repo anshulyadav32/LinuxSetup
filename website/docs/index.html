@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Linux Setup - Modular Server Management System</title>
+    <meta name="description" content="Comprehensive documentation for the modular server management system covering installation, modules, workflows, and customization.">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Linux Setup - Modular Server Management System</h1>
+            <p class="tagline">Documentation</p>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div class="nav-wrapper">
+            <a href="../index.html" class="nav-logo">🚀 Linux Setup</a>
+            
+            <!-- Desktop Navigation -->
+            <ul class="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../index.html#installation">Installation</a></li>
+                <li><a href="../index.html#usage">Usage</a></li>
+                <li><a href="../index.html#components">Components</a></li>
+                <li><a href="../index.html#modules">Modules</a></li>
+                <li><a href="../index.html#core-scripts">Core Scripts</a></li>
+                <li><a href="../index.html#maintenance">Maintenance</a></li>
+                <li><a href="index.html" class="active" style="color: var(--primary-color); font-weight: 600;">Documentation</a></li>
+                <li><a href="https://github.com/anshulyadav32/linux-server" target="_blank" rel="noopener" style="background: var(--primary-color); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem;">GitHub</a></li>
+            </ul>
+
+            <!-- Mobile menu button -->
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container doc-grid">
+            <aside class="doc-sidebar">
+                <h4>Documentation</h4>
+                <ul>
+                    <li><a href="#getting-started">Getting Started</a></li>
+                    <li><a href="#modular-architecture">Modular Architecture</a></li>
+                    <li><a href="#service-modules">Service Modules</a></li>
+                    <li><a href="#automation-workflows">Automation Workflows</a></li>
+                    <li><a href="#checkpoint-system">Checkpoint System</a></li>
+                    <li><a href="#security">Security Features</a></li>
+                    <li><a href="#customization">Customization</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                </ul>
+            </aside>
+            
+            <div class="doc-content">
+                <section id="getting-started">
+                    <h2>Getting Started</h2>
+                    <p>The Modular Server Management System is a professional-grade solution for deploying and managing server infrastructure. It provides a comprehensive suite of modules, automated workflows, and enterprise-grade security features.</p>
+                    
+                    <h3>System Requirements</h3>
+                    <ul>
+                        <li>Ubuntu/Debian-based Linux distribution</li>
+                        <li>Administrative privileges (root/sudo access)</li>
+                        <li>Internet connection for downloading packages and dependencies</li>
+                        <li>Minimum 1GB RAM and 10GB disk space</li>
+                    </ul>
+                    
+                    <h3>Installation Methods</h3>
+                    <p>Choose your preferred installation method:</p>
+                    
+                    <h4>🚀 Comprehensive Server Installer (Recommended)</h4>
+                    <pre><code>git clone https://github.com/anshulyadav32/linux-setup.git
+cd linux-setup
+sudo ./server-installer.sh</code></pre>
+                    <p><strong>Features:</strong> 25 comprehensive checkpoints, visual progress tracking, enterprise logging, complete server stack installation.</p>
+                    
+                    <h4>⚡ One-Line Quick Setup</h4>
+                    <pre><code>curl -sSL <span class="domain-url">ls.r-u.live</span>/sh/s1.sh | sudo bash</code></pre>
+                    
+                    <p>Both methods install the complete system with all 5 service modules and essential automation workflows.</p>
+                </section>
+                
+                <section id="modular-architecture">
+                    <h2>Modular Architecture</h2>
+                    <p>The system is built on a modular architecture with standardized interfaces, allowing for flexible deployment and easy maintenance.</p>
+                    
+                    <h3>Core Components</h3>
+                    <ul>
+                        <li><strong>common.sh</strong>: Shared library with utility functions</li>
+                        <li><strong>interdependent.sh</strong>: Automation workflow orchestrator</li>
+                        <li><strong>server-installer.sh</strong>: Complete server installer with 25 comprehensive checkpoints</li>
+                        <li><strong>test-installation.sh</strong>: System testing and validation tool</li>
+                    </ul>
+                    
+                    <h3>Module Structure</h3>
+                    <p>Each module follows a standardized interface:</p>
+                    <pre><code>modules/
+├── ssl/          # SSL/TLS certificate management
+├── mail/         # Mail server setup
+├── database/     # Database management
+├── firewall/     # Security and firewall
+└── backup/       # Backup and recovery</code></pre>
+                </section>
+                
+                <section id="service-modules">
+                    <h2>Service Modules</h2>
+                    <p>The system includes 5 specialized service modules, each responsible for specific server functions:</p>
+                    
+                    <h3>SSL Module</h3>
+                    <ul>
+                        <li>Let's Encrypt certificate automation</li>
+                        <li>Self-signed certificate generation</li>
+                        <li>Multi-domain certificate support</li>
+                        <li>Auto-renewal system</li>
+                    </ul>
+                    
+                    <h3>Mail Module</h3>
+                    <ul>
+                        <li>Postfix and Dovecot configuration</li>
+                        <li>DKIM, SPF, and DMARC setup</li>
+                        <li>Anti-spam and antivirus integration</li>
+                        <li>Webmail interface deployment</li>
+                    </ul>
+                    
+                    <h3>Database Module</h3>
+                    <ul>
+                        <li>PostgreSQL/MariaDB/MongoDB installation</li>
+                        <li>Performance tuning and optimization</li>
+                        <li>Backup and replication setup</li>
+                        <li>Security hardening</li>
+                    </ul>
+                    
+                    <h3>Security & Other Modules</h3>
+                    <ul>
+                        <li><strong>Firewall:</strong> UFW/iptables configuration, intrusion prevention</li>
+                        <li><strong>Backup:</strong> Automated backups, disaster recovery</li>
+                    </ul>
+                </section>
+                
+                <section id="automation-workflows">
+                    <h2>Automation Workflows</h2>
+                    <p>The system includes essential automation workflows for common server deployments:</p>
+                    
+                    <h3>Core Infrastructure</h3>
+                    <ul>
+                        <li><strong>SSL Automation:</strong> Let's Encrypt certificate management</li>
+                        <li><strong>Mail Server:</strong> Complete email solution with webmail</li>
+                        <li><strong>Database Server:</strong> Multi-database deployment and management</li>
+                        <li><strong>Security Hardening:</strong> Comprehensive firewall and security configuration</li>
+                    </ul>
+                    
+                    <h3>Management Workflows</h3>
+                    <ul>
+                        <li><strong>Backup Configuration:</strong> Automated backup systems</li>
+                        <li><strong>Security Monitoring:</strong> Intrusion prevention and monitoring</li>
+                        <li><strong>System Maintenance:</strong> Automated maintenance and updates</li>
+                        <li><strong>Health Monitoring:</strong> Service monitoring and alerts</li>
+                    </ul>
+                </section>
+                
+                <section id="checkpoint-system">
+                    <h2>Checkpoint System</h2>
+                    <p>The advanced checkpoint system provides robust error handling and recovery capabilities:</p>
+                    
+                    <h3>Features</h3>
+                    <ul>
+                        <li><strong>12 Checkpoint System:</strong> Granular progress tracking</li>
+                        <li><strong>Automatic Resume:</strong> Continue from last successful checkpoint</li>
+                        <li><strong>Error Recovery:</strong> Intelligent error handling and retry logic</li>
+                        <li><strong>Rollback Capability:</strong> Undo changes when necessary</li>
+                    </ul>
+                    
+                    <h3>Complete Server Installation (25 Checkpoints)</h3>
+                    <p>The <code>server-installer.sh</code> provides complete server installation with comprehensive features:</p>
+                    <ol>
+                        <li>✓ Pre-installation system checks (root, OS, internet, resources)</li>
+                        <li>✓ System update and essential dependencies installation</li>
+                        <li>✓ UFW firewall configuration with essential ports</li>
+                        <li>✓ Web servers installation (Nginx + Apache + PHP-FPM)</li>
+                        <li>✓ Database servers installation (MySQL + PostgreSQL)</li>
+                        <li>✓ Mail servers installation (Postfix + Dovecot)</li>
+                        <li>✓ DNS server installation (BIND9)</li>
+                        <li>✓ SSL tools installation (Certbot for Let's Encrypt)</li>
+                        <li>✓ Monitoring tools installation (htop, fail2ban, network tools)</li>
+                        <li>✓ Backup system configuration with automated directories</li>
+                        <li>✓ Log rotation and maintenance automation</li>
+                        <li>✓ Cron jobs for automated system maintenance</li>
+                        <li>✓ Additional development and network tools</li>
+                        <li>✓ System users creation for enhanced security</li>
+                        <li>✓ System optimization (limits, sysctl, network tuning)</li>
+                        <li>✓ Server management modules integration</li>
+                        <li>✓ System-wide command shortcuts creation</li>
+                        <li>✓ Service verification and health checks</li>
+                        <li>✓ Installation summary and documentation generation</li>
+                        <li>✓ And more comprehensive server setup features...</li>
+                    </ol>
+                    
+                    <h4>Installation Options:</h4>
+                    <pre><code># Complete installation
+sudo ./server-installer.sh
+
+# Pre-installation check
+sudo ./server-installer.sh --check
+
+# Show help
+./server-installer.sh --help</code></pre>
+                    
+                    <h3>Usage</h3>
+                    <pre><code># Check installation status
+sudo ./test-installation.sh --status
+
+# Resume from specific checkpoint
+sudo ./install-server.sh --resume-from 5
+
+# Reset and start fresh
+sudo ./test-installation.sh --reset</code></pre>
+                </section>
+                
+                <section id="security">
+                    <h2>Security Features</h2>
+                    <p>The modular system incorporates enterprise-grade security features throughout all components:</p>
+                    
+                    <h3>Core Security Features</h3>
+                    <ul>
+                        <li><strong>Security Hardening:</strong> Automated system hardening with industry best practices</li>
+                        <li><strong>Firewall Management:</strong> Advanced UFW/iptables configuration with intrusion prevention</li>
+                        <li><strong>SSL/TLS Automation:</strong> Let's Encrypt integration with automatic renewal</li>
+                        <li><strong>Access Control:</strong> Role-based access control and privilege escalation protection</li>
+                        <li><strong>Audit Logging:</strong> Comprehensive logging and monitoring integration</li>
+                    </ul>
+                    
+                    <h3>Security Validation</h3>
+                    <pre><code># Run security audit
+sudo ./modules/firewall/security-audit.sh
+
+# Check SSL certificate status
+sudo ./modules/ssl/check-certificates.sh
+
+# Review access logs
+sudo ./modules/system/review-logs.sh</code></pre>
+                    
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li>Always review module configurations before deployment</li>
+                        <li>Use strong passwords and key-based authentication</li>
+                        <li>Regularly update the system using the built-in update mechanisms</li>
+                        <li>Monitor system logs and security alerts</li>
+                        <li>Implement backup and disaster recovery procedures</li>
+                    </ul>
+                </section>
+                
+                <section id="customization">
+                    <h2>Customization</h2>
+                    <p>The modular architecture allows for extensive customization to meet specific requirements:</p>
+                    
+                    <h3>Module Customization</h3>
+                    <p>Each module can be customized by modifying its configuration files:</p>
+                    <pre><code># Edit SSL module configuration
+sudo nano modules/ssl/config.conf
+
+# Customize mail server settings
+sudo nano modules/mail/mail.conf
+
+# Modify database parameters
+sudo nano modules/database/database.conf</code></pre>
+                    
+                    <h3>Workflow Modification</h3>
+                    <p>Automation workflows can be customized by editing the interdependent.sh script:</p>
+                    <pre><code># Edit workflow definitions
+sudo nano interdependent.sh
+
+# Test custom workflow
+sudo ./test-installation.sh --test-workflow custom</code></pre>
+                    
+                    <h3>Adding Custom Modules</h3>
+                    <p>Create custom modules following the standardized interface:</p>
+                    <pre><code>modules/custom/
+├── install.sh      # Installation script
+├── configure.sh    # Configuration script
+├── test.sh         # Testing script
+└── config.conf     # Configuration file</code></pre>
+                </section>
+                
+                <section id="troubleshooting">
+                    <h2>Troubleshooting</h2>
+                    <p>Common issues and their solutions when using the modular system:</p>
+                    
+                    <h3>Installation Issues</h3>
+                    <dl>
+                        <dt>Installation fails at checkpoint X</dt>
+                        <dd>
+                            <p>Use the checkpoint system to diagnose and resume:</p>
+                            <pre><code># Check status
+sudo ./test-installation.sh --status
+
+# View detailed logs
+sudo ./test-installation.sh --logs checkpoint-X
+
+# Resume from previous checkpoint
+sudo ./install-server.sh --resume-from X</code></pre>
+                        </dd>
+                        
+                        <dt>Module dependencies missing</dt>
+                        <dd>
+                            <p>Install missing dependencies manually:</p>
+                            <pre><code># Check dependencies
+sudo ./install-server.sh --check-deps
+
+# Install specific module dependencies
+sudo ./modules/MODULE_NAME/install.sh --deps-only</code></pre>
+                        </dd>
+                    </dl>
+                    
+                    <h3>Service Issues</h3>
+                    <dl>
+                        <dt>SSL certificate issues</dt>
+                        <dd>
+                            <p>Check SSL module status and logs:</p>
+                            <pre><code># Module status
+sudo ./modules/ssl/test.sh --status
+
+# View certificate logs
+sudo ./modules/ssl/test.sh --logs</code></pre>
+                        </dd>
+                        
+                        <dt>Mail server configuration errors</dt>
+                        <dd>
+                            <p>Validate mail configuration:</p>
+                            <pre><code># Test mail configuration
+sudo ./modules/mail/test.sh --validate
+
+# Check firewall rules
+sudo ./modules/firewall/test.sh --check-rules</code></pre>
+                        </dd>
+                    </dl>
+                    
+                    <h3>Performance Issues</h3>
+                    <dl>
+                        <dt>System performance degradation</dt>
+                        <dd>
+                            <p>Run system optimization:</p>
+                            <pre><code># System analysis
+sudo ./modules/system/test.sh --performance
+
+# Apply optimizations
+sudo ./modules/system/configure.sh --optimize</code></pre>
+                        </dd>
+                    </dl>
+                    
+                    <h3>Getting Help</h3>
+                    <p>If you encounter issues not covered here:</p>
+                    <ul>
+                        <li>Check the GitHub repository for known issues and solutions</li>
+                        <li>Review system logs for detailed error information</li>
+                        <li>Use the built-in diagnostic tools provided with each module</li>
+                        <li>Contact support through the project's GitHub issues page</li>
+                    </ul>
+                </section>
+                    
+                    <h3>Modifying Scripts</h3>
+                    <p>To customize a script:</p>
+                    <ol>
+                        <li>Download the script to your local system</li>
+                        <li>Open it in a text editor</li>
+                        <li>Modify the configuration variables at the top of the script</li>
+                        <li>Save and run the modified script</li>
+                    </ol>
+                    
+                    <h3>Configuration Files</h3>
+                    <p>Key configuration files for each component are located in standard system locations:</p>
+                    <ul>
+                        <li>Postfix: <code>/etc/postfix/main.cf</code></li>
+                        <li>Dovecot: <code>/etc/dovecot/dovecot.conf</code></li>
+                        <li>BIND: <code>/etc/bind/named.conf</code></li>
+                    </ul>
+                </section>
+                
+                <section id="troubleshooting">
+                    <h2>Troubleshooting</h2>
+                    <p>If you encounter issues with the scripts, try the following troubleshooting steps:</p>
+                    
+                    <h3>Common Issues</h3>
+                    <ul>
+                        <li><strong>Script execution permission:</strong> Make sure the script is executable (<code>chmod +x script.sh</code>)</li>
+                        <li><strong>Repository access:</strong> Ensure your system can access required package repositories</li>
+                        <li><strong>Disk space:</strong> Verify you have sufficient disk space for installation</li>
+                        <li><strong>Network issues:</strong> Check your network connectivity</li>
+                    </ul>
+                    
+                    <h3>Logs</h3>
+                    <p>Check relevant log files for error messages:</p>
+                    <ul>
+                        <li>System log: <code>/var/log/syslog</code></li>
+                        <li>Mail log: <code>/var/log/mail.log</code></li>
+                        <li>BIND DNS log: <code>/var/log/named/named.log</code></li>
+                    </ul>
+                    
+                    <h3>Getting Help</h3>
+                    <p>If you need assistance, you can:</p>
+                    <ul>
+                        <li>Open an issue on <a href="https://github.com/anshulyadav32/linux-setup/issues" target="_blank">GitHub</a></li>
+                        <li>Review existing issues for similar problems and solutions</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Modular Server Management System. All rights reserved.</p>
+            <p>Domain: <span class="domain-url">ls.r-u.live</span> | Mirror: <span class="domain-url">anshulyadav32.github.io/linux-setup</span></p>
+        </div>
+    </footer>
+    
+    <script src="../assets/js/domain-switcher.js"></script>
+    <script>
+        // Update domain URLs in the page based on current domain
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentDomain = window.location.hostname;
+            const domainElements = document.querySelectorAll('.domain-url');
+            
+            domainElements.forEach(element => {
+                if (currentDomain === 'anshulyadav32.github.io') {
+                    if (element.textContent === 'ls.r-u.live') {
+                        element.textContent = 'anshulyadav32.github.io/linux-setup';
+                    }
+                } else {
+                    if (element.textContent === 'anshulyadav32.github.io/linux-setup') {
+                        element.textContent = 'ls.r-u.live';
+                    }
+                }
+            });
+        });
+
+        // Mobile navigation toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!navToggle.contains(event.target) && !navMenu.contains(event.target)) {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
