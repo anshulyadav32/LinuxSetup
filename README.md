@@ -2,6 +2,35 @@
 
 A comprehensive collection of modular bash scripts for setting up and configuring Linux development environments.
 
+## 📁 Project Structure
+
+```
+LinuxSetup/
+├── src/                    # Source code
+│   ├── modules/            # Individual setup modules
+│   │   ├── backup.sh      # Backup module
+│   │   ├── database.sh    # Database module
+│   │   ├── devenv.sh      # Development environment
+│   │   ├── dns.sh         # DNS server module
+│   │   ├── firewall.sh    # Firewall module
+│   │   ├── node.sh        # Node.js module
+│   │   ├── ssl.sh         # SSL/TLS module
+│   │   └── webserver.sh   # Web server module
+│   ├── scripts/           # Main scripts
+│   │   ├── setup.sh       # Main setup script
+│   │   ├── check-setup.sh # Setup verification
+│   │   └── update-all.sh  # Update script
+│   └── utils/             # Utility functions
+│       └── utils.sh       # Common utilities
+├── config/                # Configuration files
+│   ├── dev.env           # Development environment
+│   └── prod.env          # Production environment
+├── tests/                # Test suite
+│   ├── test_helper.sh    # Testing utilities
+│   └── *_test.sh        # Module tests
+└── docs/                 # Documentation
+    └── index.html        # Documentation website
+
 ## 🌟 Features
 
 - **Modular Design**: Each component is a separate module for flexible installation
