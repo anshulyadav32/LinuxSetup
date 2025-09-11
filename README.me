@@ -1,0 +1,179 @@
+# Linux Server Setup Scripts 🚀
+
+A powerful collection of modular scripts for automated Linux server deployment and configuration. Configure web servers, databases, and DNS with a single command!
+
+## ⚡ Features
+
+### 🌐 Web Server (Nginx/Apache)
+- **Multiple Server Types**: Choose between Nginx or Apache
+- **Application Support**: PHP, Node.js (with PM2), and static HTML
+- **SSL Integration**: Let's Encrypt with auto-renewal
+- **Virtual Hosts**: Multiple domains with subdomains
+- **Reverse Proxy**: Built-in for Node.js apps
+- **Smart Validation**: Config testing and reload
+
+### 🗄️ Database (MySQL/PostgreSQL)
+- **Multi-DB Support**: MySQL/MariaDB and PostgreSQL
+- **Secure Setup**: Hardened default configuration
+- **User Management**: Create databases and users
+- **Automated Backups**: Scheduled with retention
+- **Replication**: Master-slave setup (optional)
+- **Performance**: Optimized settings
+
+### 🔀 DNS Server (BIND9)
+- **Zone Management**: Forward & reverse (IPv4/IPv6)
+- **Security**: DNSSEC with auto key management
+- **Transfers**: TSIG-secured zone transfers
+- **Advanced Features**: Split-horizon DNS with ACLs
+- **Protection**: Response Rate Limiting (RRL)
+- **Updates**: Dynamic DNS with TSIG auth
+
+## 🚀 Quick Start
+
+1. Clone the repository:
+```bash
+git clone https://github.com/anshulyadav32/LS.git
+cd LS/modular-cript
+```
+
+2. Deploy what you need:
+
+```bash
+# For web server
+sudo bash deploy-web.sh
+
+# For database
+sudo bash deploy-db.sh
+
+# For DNS server
+sudo bash deploy-dns.sh
+```
+
+## 📁 Structure
+
+```
+modular-cript/
+├── deploy.sh         # Main deployment script
+├── deploy-web.sh    # Web server deployment
+├── deploy-db.sh     # Database deployment
+├── deploy-dns.sh    # DNS server deployment
+└── modules/         # Core modules
+    ├── common.sh    # Shared utilities
+    ├── web.sh      # Web server functions
+    ├── db.sh       # Database functions
+    └── dns.sh      # DNS server functions
+```
+
+## 📋 Module Details
+
+### Web Server Module
+- Choice between Nginx and Apache
+- PHP-FPM and Node.js support
+- SSL certificate automation
+- Virtual host configuration
+- PM2 process management
+- Load balancing ready
+
+### Database Module
+- MySQL/MariaDB or PostgreSQL
+- Secure default configs
+- User/database management
+- Backup automation
+- Performance optimization
+- Replication support
+
+### DNS Module
+- BIND9 with DNSSEC
+- Zone management
+- TSIG security
+- Split DNS views
+- RRL protection
+- Dynamic updates
+
+## 🛡️ Security Features
+
+- Automated SSL certificates
+- Secure database configurations
+- DNSSEC implementation
+- TSIG authentication
+- Restricted file permissions
+- Regular security updates
+
+## 🔧 Configuration
+
+Each deployment script is interactive and will:
+1. Prompt for necessary information
+2. Validate inputs
+3. Show a summary before proceeding
+4. Apply configurations
+5. Display post-setup information
+
+## 📝 Example Usage
+
+### Web Server
+```bash
+sudo bash deploy-web.sh
+# Follow prompts for:
+# - Server type (Nginx/Apache)
+# - Domain name
+# - Application type (PHP/Node/HTML)
+# - SSL setup
+```
+
+### Database
+```bash
+sudo bash deploy-db.sh
+# Follow prompts for:
+# - Database type (MySQL/PostgreSQL)
+# - Root password
+# - Database name
+# - User credentials
+```
+
+### DNS
+```bash
+sudo bash deploy-dns.sh
+# Follow prompts for:
+# - Domain name
+# - Zone configuration
+# - DNSSEC setup
+# - Transfer settings
+```
+
+## 📊 Post-Install
+
+After deployment, you'll get:
+- Configuration file locations
+- Log file paths
+- Test commands
+- Validation steps
+- Next steps guide
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## 📝 License
+
+MIT License - See LICENSE file for details.
+
+## 📬 Support
+
+- GitHub Issues: Bug reports
+- Discussions: Feature requests
+- Wiki: Extended documentation
+
+## 🔄 Updates
+
+Stay updated:
+1. Watch the repository
+2. Check releases
+3. Pull latest changes
+
+---
+
+Made with ❤️ for Linux sysadmins
