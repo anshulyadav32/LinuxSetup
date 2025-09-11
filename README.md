@@ -78,7 +78,61 @@ modular-cript/
     ├── web.sh        # Web server module
     ├── db.sh         # Database module
     └── dns.sh        # DNS server module
+
+src/
+├── modules/          # Core modules
+│   ├── backup.sh    # Backup operations
+│   ├── database.sh  # Database operations
+│   ├── dns.sh       # DNS configuration
+│   ├── firewall.sh  # Firewall management
+│   ├── node.sh      # Node.js setup
+│   ├── ssl.sh       # SSL/TLS management
+│   └── webserver.sh # Web server config
+├── scripts/         # Main scripts
+│   ├── setup.sh     # Initial setup
+│   └── update.sh    # System updates
+└── utils/          # Utility functions
+    └── utils.sh    # Core utilities
 ```
+
+## 🛠️ Core Utilities
+
+Our `utils.sh` provides comprehensive utility functions for all deployment needs:
+
+### 📝 Logging & Output
+- Color-coded logging functions (`info`, `ok`, `warn`, `error`)
+- Progress indicators for long-running tasks
+- Step-by-step operation tracking
+
+### 🔧 System Management
+- Package management helpers (`apt_update`, `apt_install`)
+- Service management (`restart_service`, `enable_service`)
+- System monitoring (`check_memory`, `check_disk_space`)
+- Process management with user context support
+
+### 🚀 Deployment Tools
+- Environment file management (`deploy_env_file`, `load_env`)
+- Service deployment (`deploy_systemd_service`, `deploy_nginx_config`)
+- Application deployment (`deploy_app`, `wait_for_port`)
+- Database operations (`create_db`, `create_db_user`, `grant_db_privileges`)
+
+### 🔒 Security
+- SSL/TLS setup (`setup_ssl`, `check_ssl_cert`)
+- Secure key generation (`generate_secure_key`)
+- File permission management
+- Backup utilities (`backup_file`)
+
+### ⚙️ Configuration
+- Configuration merging (`merge_config`)
+- Environment validation
+- Domain and email validation
+- Interactive prompts (`prompt_yes_no`, `get_password`)
+
+### 📊 Monitoring
+- Port availability checking
+- Service health monitoring
+- Resource usage tracking
+- Log management
 
 ## 📋 Configuration
 
