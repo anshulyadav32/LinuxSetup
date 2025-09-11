@@ -19,6 +19,8 @@ source modules/dns.sh
 source modules/firewall.sh
 source modules/ssl.sh
 source modules/webserver.sh
+source modules/node.sh
+source modules/devenv.sh
 
 # --- Utilities ---
 log_header() { echo -e "\n========== $1 ==========\n"; }
