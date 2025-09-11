@@ -1,25 +1,12 @@
 #!/bin/bash
 # =============================================================================
-# Linux Server Setup Script
+# Master Setup Script
 # =============================================================================
-# A comprehensive setup script for Linux servers and development environments.
-# Supported distributions: Ubuntu, Debian, RHEL, Fedora, Arch Linux
-#
-# Modules:
-#   - Webserver (Apache/Nginx)
-#   - Database (MySQL/PostgreSQL)
-#   - DNS (BIND/dnsmasq)
-#   - SSL/TLS (Let's Encrypt)
-#   - Firewall (UFW/firewalld)
-#   - Backup (rsync/tar)
-#   - Development Environment
-#
+# Installs and tests: Webserver, Database, DNS, SSL, Firewall, Backup
 # Usage:
 #   ./setup.sh all       -> install everything
 #   ./setup.sh webserver -> install webserver only
 #   ./setup.sh test      -> run all module tests
-#
-# Note: This script must be run on a Linux system with bash shell
 # =============================================================================
 
 set -euo pipefail

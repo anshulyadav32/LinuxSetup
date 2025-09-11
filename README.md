@@ -4,32 +4,32 @@ A comprehensive collection of modular bash scripts for setting up and configurin
 
 ## 📁 Project Structure
 
-```
+```bash
 LinuxSetup/
 ├── src/                    # Source code
-│   ├── modules/            # Individual setup modules
-│   │   ├── backup.sh      # Backup module
-│   │   ├── database.sh    # Database module
-│   │   ├── devenv.sh      # Development environment
-│   │   ├── dns.sh         # DNS server module
-│   │   ├── firewall.sh    # Firewall module
-│   │   ├── node.sh        # Node.js module
-│   │   ├── ssl.sh         # SSL/TLS module
-│   │   └── webserver.sh   # Web server module
-│   ├── scripts/           # Main scripts
-│   │   ├── setup.sh       # Main setup script
-│   │   ├── check-setup.sh # Setup verification
-│   │   └── update-all.sh  # Update script
-│   └── utils/             # Utility functions
-│       └── utils.sh       # Common utilities
-├── config/                # Configuration files
-│   ├── dev.env           # Development environment
-│   └── prod.env          # Production environment
-├── tests/                # Test suite
-│   ├── test_helper.sh    # Testing utilities
-│   └── *_test.sh        # Module tests
-└── docs/                 # Documentation
-    └── index.html        # Documentation website
+│   ├── modules/           # Linux setup modules
+│   │   ├── backup.sh     # Backup system setup
+│   │   ├── database.sh   # Database server setup
+│   │   ├── devenv.sh     # Development tools setup
+│   │   ├── dns.sh        # DNS server setup
+│   │   ├── firewall.sh   # Firewall configuration
+│   │   ├── node.sh       # Node.js environment
+│   │   ├── ssl.sh        # SSL/TLS management
+│   │   └── webserver.sh  # Web server setup
+│   ├── scripts/          # Main bash scripts
+│   │   ├── setup.sh      # Main setup script
+│   │   ├── check-setup.sh # Verification script
+│   │   └── update-all.sh # System update script
+│   └── utils/            # Bash utilities
+│       └── utils.sh      # Common shell functions
+├── config/               # Environment configs
+│   ├── dev.env          # Development settings
+│   └── prod.env         # Production settings
+├── tests/               # Bash test suite
+│   ├── test_helper.sh   # Test utilities
+│   └── *_test.sh       # Module tests
+└── docs/                # Documentation
+    └── index.html       # Documentation site
 
 ## 🌟 Features
 

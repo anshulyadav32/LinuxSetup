@@ -1,3 +1,13 @@
+# Windows-specific files
+*.ps1
+*.bat
+*.cmd
+*.exe
+*.msi
+*.dll
+Thumbs.db
+desktop.ini
+
 # OS generated files
 .DS_Store
 .DS_Store?
@@ -5,12 +15,22 @@
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db
 
-# Backup files
-*.bak
+# Editor files
+.vscode/
+.idea/
 *.swp
 *~
 
-# Logs
+# Backup files
+*.bak
+*.tmp
+*.old
+
+# Log files
 *.log
+
+# Windows-specific directories
+Windows/
+win32/
+win64/
