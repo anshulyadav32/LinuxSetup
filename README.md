@@ -1,257 +1,118 @@
 # Linux Server Setup Scripts 🚀
 
-A collection of modular scripts for setting up and managing Linux servers, with support for web applications, databases, SSL, and more.
+Comprehensive automation for deploying and configuring Linux servers with:
 
-## 📁 Project Structure
-
-```bash
-.
-├── src/                    # Source code
-│   ├── modules/           # Linux setup modules
-│   │   ├── backup.sh     # Backup system setup
-│   │   ├── database.sh   # Database server setup
-│   │   ├── devenv.sh     # Development tools setup
-│   │   ├── dns.sh        # DNS server setup
-│   │   ├── firewall.sh   # Firewall configuration
-│   │   ├── node.sh       # Node.js environment
-│   │   ├── ssl.sh        # SSL/TLS management
-│   │   └── webserver.sh  # Web server setup
-│   ├── scripts/          # Main bash scripts
-│   │   ├── setup.sh      # Main setup script
-│   │   ├── check-setup.sh # Verification script
-│   │   └── update-all.sh # System update script
-│   └── utils/            # Bash utilities
-│       └── utils.sh      # Common shell functions
-├── config/               # Environment configs
-│   ├── dev.env          # Development settings
-│   └── prod.env         # Production settings
-├── tests/               # Bash test suite
-│   └── test_helper.sh   # Test utilities
-└── modular-cript/       # Modular deployment scripts
-    ├── .env             # Environment configuration
-    ├── deploy.sh        # Main deployment script
-    ├── deploy-db.sh     # Database deployment script
-    └── modules/         # Modular components
-        ├── common.sh    # Shared utilities
-        ├── nginx.sh     # Nginx configuration
-        ├── node.sh      # Node.js setup and PM2
-        ├── php.sh       # PHP-FPM setup
-        ├── db.sh        # Database functions
-        ├── ssl.sh       # SSL/HTTPS setup
-        └── summary.sh   # Deployment summary
+- **Web servers** (Nginx/Apache)
+- **Databases** (MySQL/PostgreSQL)
+- **DNS servers** (BIND9)
 
 ## 🌟 Features
 
-### General Features
-- ✨ **Interactive Setup**: User-friendly prompts with smart defaults
-- 🔄 **Persistent Configuration**: Save settings for reproducible deployments
-- 📦 **Modular Design**: Each component is a separate module for flexible installation
-- 🔧 **Easy to Extend**: Simple structure for adding new modules
+### 🌐 Web Server (Nginx/Apache)
+- PHP, Node.js (Express), and static HTML support
+- Let's Encrypt SSL integration
+- Multiple sites (vhosts) with subdomains
+- PM2 process management for Node.js
+- Reverse proxy configuration
+- Full validation and testing
 
-### Web Application Deployment (`modular-cript/`)
-- 🌐 **Web Server Support**:
-  - Nginx configuration with virtual hosts
-  - PHP-FPM integration
-  - Node.js with PM2 process management
-- 🔒 **SSL/HTTPS**:
-  - Automatic certificate generation via Let's Encrypt
-  - HTTPS redirection and HSTS
-  - OCSP stapling for better performance
-- 📊 **Database Management**:
-  - MySQL/MariaDB support
-  - PostgreSQL support
-  - Automated backups
-  - Remote access configuration
-- 🛡️ **Security**:
-  - Secure default configurations
-  - Automatic password generation
-  - Proper file permissions
+### 🗄️ Database Server
+- MySQL/MariaDB and PostgreSQL support
+- Secure installation and configuration
+- Database and user management
+- Automated backups
+- Replication support
+- Performance optimization
 
-### System Setup (`src/`)
-- 🔧 **Development Environment**:
-  - Git & GitHub CLI
-  - Node.js & Python
-  - Docker & Docker Compose
-- 🌐 **Server Components**:
-  - DNS server (BIND9/dnsmasq)
-  - Firewall (UFW/Firewalld)
-  - Backup system (rsync/tar)
+### 🔀 DNS Server (BIND9)
+- Forward & reverse zones (IPv4/IPv6)
+- DNSSEC with inline-signing
+- Zone transfers with TSIG
+- Split-horizon (views) with ACLs
+- Response Rate Limiting (RRL)
+- Dynamic updates support
+
+## 📦 Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/anshulyadav32/LS.git
+cd LS
+```
+
+2. Run the master deployment script:
+```bash
+sudo bash deploy-master.sh
+```
 
 ## 🚀 Quick Start
 
-### Web Application Deployment
-
-1. Deploy a website with PHP and Node.js:
-   ```bash
-   cd modular-cript
-   sudo bash deploy.sh
-   ```
-   This will:
-   - Set up Nginx web server
-   - Configure PHP-FPM
-   - Install Node.js and PM2
-   - Set up SSL certificates (optional)
-
-2. Set up a database:
-   ```bash
-   cd modular-cript
-   sudo bash deploy-db.sh
-   ```
-   This will:
-   - Install chosen database (MySQL/MariaDB or PostgreSQL)
-   - Create database and user
-   - Configure remote access (optional)
-   - Set up automated backups
-
-### System Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/anshulyadav32/LinuxSetup.git
-   cd LinuxSetup
-   ```
-
-2. Install specific components:
-   ```bash
-   cd src/scripts
-   sudo bash setup.sh [component-name]
-   ```
-   Available components: devenv, webserver, database, dns, ssl, firewall, backup
-
-## 📝 Configuration
-
-### Web Application Environment
-
-Create a `.env` file in the `modular-cript` directory:
+### Web Server Deployment
 ```bash
-# Domain & paths
-DOMAIN="example.com"
-WEBROOT="/var/www/${DOMAIN}"
-
-# Node
-NODE_PORT=3000
-PM2_APP="${DOMAIN}-node"
-
-# Nginx
-NGINX_SITE="/etc/nginx/sites-available/${DOMAIN}"
+cd modular-cript
+sudo bash deploy-web.sh
 ```
 
-All settings can be overridden during deployment via interactive prompts.
-
-## 🔧 Maintenance
-
-### Service Management
+### Database Deployment
 ```bash
-# Nginx
-sudo systemctl status nginx
-sudo systemctl restart nginx
-
-# PHP-FPM
-sudo systemctl status php*-fpm
-sudo systemctl restart php*-fpm
-
-# Database (MySQL/MariaDB)
-sudo systemctl status mariadb
-sudo systemctl restart mariadb
-
-# Database (PostgreSQL)
-sudo systemctl status postgresql
-sudo systemctl restart postgresql
+cd modular-cript
+sudo bash deploy-db.sh
 ```
 
-### PM2 Commands
+### DNS Server Deployment
 ```bash
-# Check status
-sudo -u www-data PM2_HOME="/var/www/example.com/nodeapp/.pm2" pm2 status
-
-# View logs
-sudo -u www-data PM2_HOME="/var/www/example.com/nodeapp/.pm2" pm2 logs
+cd modular-cript
+sudo bash deploy-dns.sh
 ```
+
+## 📁 Project Structure
+
+```
+modular-cript/
+├── deploy-master.sh    # Main deployment menu
+├── deploy-web.sh      # Web server deployment
+├── deploy-db.sh       # Database deployment
+├── deploy-dns.sh      # DNS server deployment
+└── modules/           # Core functionality
+    ├── common.sh     # Shared utilities
+    ├── web.sh        # Web server module
+    ├── db.sh         # Database module
+    └── dns.sh        # DNS server module
+```
+
+## 📋 Configuration
+
+Each deployment script is interactive and will guide you through the setup process with sensible defaults and comprehensive options.
 
 ## 📝 License
 
-MIT License. See [LICENSE](LICENSE) file for details.
-   ./setup.sh test
-   ```
-
-## 📋 Requirements
-
-- Bash shell
-- Root/sudo access
-- Internet connection for package installation
-- One of the supported distributions:
-  - Debian/Ubuntu
-  - RHEL/Fedora
-  - Arch Linux
-
-## 🛠 Module Details
-
-### Development Environment (devenv)
-- Full development environment setup
-- Installs and configures:
-  - Git & GitHub CLI
-  - Node.js (LTS) with npm/yarn
-  - Python 3 with pip/virtualenv
-  - Docker & Docker Compose
-  - Build tools (gcc, g++, make)
-  - Code editors and utilities
-
-### Web Server
-- Apache and Nginx setup
-- PHP-FPM configuration
-- Virtual host management
-- HTTP/2 support
-- Performance optimization
-
-### Database
-- MySQL/MariaDB setup
-- PostgreSQL configuration
-- Security hardening
-- Backup configuration
-- Performance tuning
-
-### DNS Server
-- BIND9/dnsmasq installation
-- Zone configuration
-- DNS security setup
-- Testing tools
-
-### SSL/TLS
-- Let's Encrypt integration
-- Auto-renewal setup
-- Multi-domain support
-- SSL testing tools
-
-### Firewall
-- UFW/Firewalld setup
-- Basic security rules
-- Service configurations
-- Status monitoring
-
-### Backup
-- Automated backup setup
-- Multiple backup strategies
-- Backup verification
-- Restore testing
+MIT License - feel free to use and modify as needed!
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+Pull requests are welcome! Feel free to contribute by:
+1. Forking the repository
+2. Creating a feature branch
+3. Making your changes
+4. Opening a pull request
 
-## 📜 License
+## 📬 Support
 
-MIT License - feel free to use and modify for your needs
+- Create an issue for bug reports
+- Start a discussion for feature requests
+- Check the wiki for detailed documentation
 
-## 💬 Support
+## 🔐 Security
 
-For issues and support:
-- Create an issue in the GitHub repository
-- Send a pull request with your improvements
-- Contact the maintainer
+- All passwords are generated securely
+- SSL/TLS enabled by default
+- Regular security updates
+- Best practices followed
 
----
-Made with ❤️ by [Anshul Yadav](https://github.com/anshulyadav32)
+## 🔄 Updates
+
+Subscribe to releases to get notified about:
+- New features
+- Security updates
+- Bug fixes
+- Performance improvements
