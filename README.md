@@ -1,11 +1,11 @@
-# Linux Setup Scripts 🚀
+# Linux Server Setup Scripts 🚀
 
-A comprehensive collection of modular bash scripts for setting up and configuring Linux development environments.
+A collection of modular scripts for setting up and managing Linux servers, with support for web applications, databases, SSL, and more.
 
 ## 📁 Project Structure
 
 ```bash
-LinuxSetup/
+.
 ├── src/                    # Source code
 │   ├── modules/           # Linux setup modules
 │   │   ├── backup.sh     # Backup system setup
@@ -26,57 +26,84 @@ LinuxSetup/
 │   ├── dev.env          # Development settings
 │   └── prod.env         # Production settings
 ├── tests/               # Bash test suite
-│   ├── test_helper.sh   # Test utilities
-│   └── *_test.sh       # Module tests
-└── docs/                # Documentation
-    └── index.html       # Documentation site
+│   └── test_helper.sh   # Test utilities
+└── modular-cript/       # Modular deployment scripts
+    ├── .env             # Environment configuration
+    ├── deploy.sh        # Main deployment script
+    ├── deploy-db.sh     # Database deployment script
+    └── modules/         # Modular components
+        ├── common.sh    # Shared utilities
+        ├── nginx.sh     # Nginx configuration
+        ├── node.sh      # Node.js setup and PM2
+        ├── php.sh       # PHP-FPM setup
+        ├── db.sh        # Database functions
+        ├── ssl.sh       # SSL/HTTPS setup
+        └── summary.sh   # Deployment summary
 
 ## 🌟 Features
 
-- **Modular Design**: Each component is a separate module for flexible installation
-- **Multi-Distribution Support**: Works on Debian/Ubuntu, RHEL/Fedora, and Arch Linux
-- **Comprehensive Testing**: Built-in testing for each module
-- **Easy to Extend**: Simple structure for adding new modules
+### General Features
+- ✨ **Interactive Setup**: User-friendly prompts with smart defaults
+- 🔄 **Persistent Configuration**: Save settings for reproducible deployments
+- 📦 **Modular Design**: Each component is a separate module for flexible installation
+- 🔧 **Easy to Extend**: Simple structure for adding new modules
 
-## 📦 Available Modules
+### Web Application Deployment (`modular-cript/`)
+- 🌐 **Web Server Support**:
+  - Nginx configuration with virtual hosts
+  - PHP-FPM integration
+  - Node.js with PM2 process management
+- 🔒 **SSL/HTTPS**:
+  - Automatic certificate generation via Let's Encrypt
+  - HTTPS redirection and HSTS
+  - OCSP stapling for better performance
+- 📊 **Database Management**:
+  - MySQL/MariaDB support
+  - PostgreSQL support
+  - Automated backups
+  - Remote access configuration
+- 🛡️ **Security**:
+  - Secure default configurations
+  - Automatic password generation
+  - Proper file permissions
 
-- **Development Environment** (`devenv`): Complete development setup
+### System Setup (`src/`)
+- 🔧 **Development Environment**:
   - Git & GitHub CLI
   - Node.js & Python
   - Docker & Docker Compose
-  - Popular dev tools and package managers
-  
-- **Web Server** (`webserver`): Apache + Nginx + PHP
-  - Multi-server setup
-  - PHP-FPM configuration
-  - Server testing and validation
-
-- **Database** (`database`): MySQL/MariaDB + PostgreSQL
-  - Automatic service configuration
-  - Security best practices
-  - Database testing tools
-
-- **DNS Server** (`dns`): BIND9/dnsmasq
-  - DNS server configuration
-  - DNS utilities
-  - Testing tools
-
-- **SSL/TLS** (`ssl`): Certbot/Let's Encrypt
-  - Automatic certificate management
-  - Support for Apache and Nginx
-  - SSL testing and validation
-
-- **Firewall** (`firewall`): UFW/Firewalld
-  - Basic security rules
-  - Service-specific configurations
-  - Firewall status monitoring
-
-- **Backup** (`backup`): rsync + tar + rclone
-  - Automated backup setup
-  - Multiple backup strategies
-  - Backup testing and verification
+- 🌐 **Server Components**:
+  - DNS server (BIND9/dnsmasq)
+  - Firewall (UFW/Firewalld)
+  - Backup system (rsync/tar)
 
 ## 🚀 Quick Start
+
+### Web Application Deployment
+
+1. Deploy a website with PHP and Node.js:
+   ```bash
+   cd modular-cript
+   sudo bash deploy.sh
+   ```
+   This will:
+   - Set up Nginx web server
+   - Configure PHP-FPM
+   - Install Node.js and PM2
+   - Set up SSL certificates (optional)
+
+2. Set up a database:
+   ```bash
+   cd modular-cript
+   sudo bash deploy-db.sh
+   ```
+   This will:
+   - Install chosen database (MySQL/MariaDB or PostgreSQL)
+   - Create database and user
+   - Configure remote access (optional)
+   - Set up automated backups
+
+### System Setup
 
 1. Clone the repository:
    ```bash
@@ -84,20 +111,66 @@ LinuxSetup/
    cd LinuxSetup
    ```
 
-2. Make scripts executable:
+2. Install specific components:
    ```bash
-   chmod +x setup.sh modules/*.sh utils.sh
+   cd src/scripts
+   sudo bash setup.sh [component-name]
    ```
+   Available components: devenv, webserver, database, dns, ssl, firewall, backup
 
-3. Run the setup:
-   ```bash
-   # Install everything
-   ./setup.sh all
-   
-   # Install specific module
-   ./setup.sh [module-name]
-   
-   # Test installations
+## 📝 Configuration
+
+### Web Application Environment
+
+Create a `.env` file in the `modular-cript` directory:
+```bash
+# Domain & paths
+DOMAIN="example.com"
+WEBROOT="/var/www/${DOMAIN}"
+
+# Node
+NODE_PORT=3000
+PM2_APP="${DOMAIN}-node"
+
+# Nginx
+NGINX_SITE="/etc/nginx/sites-available/${DOMAIN}"
+```
+
+All settings can be overridden during deployment via interactive prompts.
+
+## 🔧 Maintenance
+
+### Service Management
+```bash
+# Nginx
+sudo systemctl status nginx
+sudo systemctl restart nginx
+
+# PHP-FPM
+sudo systemctl status php*-fpm
+sudo systemctl restart php*-fpm
+
+# Database (MySQL/MariaDB)
+sudo systemctl status mariadb
+sudo systemctl restart mariadb
+
+# Database (PostgreSQL)
+sudo systemctl status postgresql
+sudo systemctl restart postgresql
+```
+
+### PM2 Commands
+```bash
+# Check status
+sudo -u www-data PM2_HOME="/var/www/example.com/nodeapp/.pm2" pm2 status
+
+# View logs
+sudo -u www-data PM2_HOME="/var/www/example.com/nodeapp/.pm2" pm2 logs
+```
+
+## 📝 License
+
+MIT License. See [LICENSE](LICENSE) file for details.
    ./setup.sh test
    ```
 
