@@ -134,7 +134,99 @@ Our `utils.sh` provides comprehensive utility functions for all deployment needs
 - Resource usage tracking
 - Log management
 
-## 📋 Configuration
+## � Usage Examples
+
+### Logging and Progress Tracking
+```bash
+# Import utilities
+source ./src/utils/utils.sh
+
+# Use logging functions
+info "Starting deployment..."
+warn "Low disk space detected"
+error "Failed to connect to database"
+ok "Deployment completed successfully"
+
+# Show progress for long operations
+(long_running_command) & show_progress "Installing packages" $!
+```
+
+### System Management
+```bash
+# Package installation
+apt_update
+apt_install nginx mysql-server nodejs
+
+# Service management
+restart_service nginx
+enable_service mysql
+
+# System checks
+check_memory 1024  # Ensure at least 1GB RAM available
+check_disk_space /var/www 10  # Ensure 10GB free space
+```
+
+### Deployment Operations
+```bash
+# Deploy a Node.js application
+deploy_app ./app /var/www/myapp www-data
+deploy_env_file .env.prod /var/www/myapp/.env
+
+# Configure web server
+deploy_nginx_config myapp /path/to/nginx.conf
+setup_ssl example.com admin@example.com
+
+# Database setup
+create_db myapp_db
+create_db_user myapp_user "secure_password"
+grant_db_privileges myapp_db myapp_user
+```
+
+### Configuration Management
+```bash
+# Load environment variables
+load_env .env.production
+
+# Merge configurations
+merge_config base.json prod.json output.json
+
+# Validate inputs
+validate_domain "example.com"
+validate_email "admin@example.com"
+
+# Interactive configuration
+if prompt_yes_no "Configure SSL?"; then
+    setup_ssl "example.com" "admin@example.com"
+fi
+```
+
+## 🌟 Best Practices
+
+### Security
+1. Always use `backup_file` before modifying critical files
+2. Use `generate_secure_key` for creating secure tokens/keys
+3. Set proper file permissions with deployment functions
+4. Enable SSL/TLS by default for web services
+
+### Deployment
+1. Check system resources before deployment
+2. Use proper service accounts for running applications
+3. Implement proper logging for all operations
+4. Always validate configuration before applying
+
+### Monitoring
+1. Regularly check system resources
+2. Monitor service health
+3. Implement proper logging
+4. Set up automated backups
+
+### Development
+1. Use the provided logging functions consistently
+2. Implement proper error handling
+3. Follow the modular structure
+4. Document new functions and modules
+
+## �📋 Configuration
 
 Each deployment script is interactive and will guide you through the setup process with sensible defaults and comprehensive options.
 
